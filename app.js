@@ -6,8 +6,11 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const User = require("./database/User");
 const bcrypt = require('bcrypt');
+const favicon = require('express-favicon');
 
 const app = express();
+
+app.use(favicon(path.join(__dirname,'views','favicon.ico')));
 
 // Connect to MongoDB using Mongoose
 mongoose
