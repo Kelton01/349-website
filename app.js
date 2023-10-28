@@ -93,16 +93,28 @@ app.post("/login", async (req, res) => {
 });
 
 app.post('/save-data', async (req, res) => {
-  const data = req.body
-  User.updateOne({ savedUserName }, data, (err) => {
-    if (err) {
-      console.error('Error updating data:', err);
-      res.status(500).json({ message: 'Failed to save data.' });
-    } else {
-      console.log('Data updated successfully');
-      res.status(200).json({ message: 'Data updated successfully.' });
-    }
-  });
+  const data = req.body;
+  if (!user) {
+    return res.status(401).json({ message: "User not found." });
+  }
+
+  // Update the user's data
+  user.backgroundColor = data.backgroundColor;
+  user.font = data.font;
+  user.name = data.name;
+  user.position = data.position;
+  user.phone = data.phone;
+  user.email = data.email;
+  user.website = data.website;
+
+  try {
+    const updatedUser = await user.save();
+    console.log('Data updated successfully');
+    res.status(200).json({ message: 'Data updated successfully.' });
+  } catch (err) {
+    console.error('Error updating data:', err);
+    res.status(500).json({ message: 'Failed to update data.' });
+  }
 });
 
 app.get("/load-data", async (req, res) => {

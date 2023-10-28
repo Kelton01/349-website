@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function saveData() {
     const data = {
       backgroundColor: document.querySelector(".information").style.backgroundColor,
-      fontFamily: document.querySelector(".information").style.fontFamily,
+      font: document.querySelector(".information").style.fontFamily,
       name: document.getElementById("name").textContent,
       position: document.getElementById("position").textContent,
       phone: document.getElementById("number").textContent,
@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((data) => {
         // Update the card details with the loaded data
         informationDiv.style.backgroundColor = data.backgroundColor;
-        informationDiv.style.fontFamily = data.fontFamily;
+        informationDiv.style.fontFamily = data.font;
         document.getElementById("name").textContent = data.name;
         document.getElementById("position").textContent = data.position;
         document.getElementById("number").textContent = data.phone;
