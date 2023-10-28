@@ -37,28 +37,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.post('/save-data', (req, res) => {
-  const data = req.body;
-
-  if (data) {
-    // Create a new UserInfo document
-    const userInfo = new UserInfo(data);
-
-    // Save it to the MongoDB database
-    userInfo
-      .save()
-      .then(() => {
-        console.log('Data saved successfully');
-        res.status(200).json({ message: 'Data saved successfully.' });
-      })
-      .catch((error) => {
-        console.error('Error saving data:', error);
-        res.status(500).json({ message: 'Failed to save data.' });
-      });
-  } else {
-    res.status(400).json({ message: 'Invalid data sent.' });
-  }
-});
+app.set('view engine', 'ejs');
 
 
 app.post("/register", async (req, res) => {
@@ -83,11 +62,14 @@ app.post("/register", async (req, res) => {
   }
 });
 
+var user;
+var savedUserName;
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
+  savedUserName = username
 
   try {
-    const user = await User.findOne({ username });
+    user = await User.findOne({ username });
 
     if (!user) {
       return res.status(401).json({ message: "Invalid username or password." });
@@ -100,10 +82,41 @@ app.post("/login", async (req, res) => {
     }
 
      // res.status(200).json({ message: "Login successful." });
-     res.status(200).sendFile(path.join(__dirname, '/public/app.html'));
+     //res.status(200).sendFile(path.join(__dirname, '/public/app.html'));
+     res.status(200).render('app.ejs', {
+      userName: user
+     });
   } catch (error) {
     console.error("Login error:", error);
     // res.status(500).json({ message: "Login failed." });
+  }
+});
+
+app.post('/save-data', async (req, res) => {
+  const data = req.body
+  User.updateOne({ savedUserName }, data, (err) => {
+    if (err) {
+      console.error('Error updating data:', err);
+      res.status(500).json({ message: 'Failed to save data.' });
+    } else {
+      console.log('Data updated successfully');
+      res.status(200).json({ message: 'Data updated successfully.' });
+    }
+  });
+});
+
+app.get("/load-data", async (req, res) => {
+  try {
+    const lastSavedData = user
+
+    if (!lastSavedData) {
+      return res.status(404).json({ message: "No data found in the database." });
+    }
+
+    res.status(200).json(lastSavedData);
+  } catch (error) {
+    console.error("Error loading last saved data:", error);
+    res.status(500).json({ message: "Failed to load last saved data." });
   }
 });
 

@@ -81,6 +81,11 @@ document.addEventListener("DOMContentLoaded", function () {
     saveData();
   });
 
+  const loadDataButton = document.getElementById("loadDataButton");
+  loadDataButton.addEventListener("click", function () {
+    loadData();
+  });
+
   // Function to save data to the server
   function saveData() {
     const data = {
@@ -88,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
       fontFamily: document.querySelector(".information").style.fontFamily,
       name: document.getElementById("name").textContent,
       position: document.getElementById("position").textContent,
-      number: document.getElementById("number").textContent,
+      phone: document.getElementById("number").textContent,
       email: document.getElementById("email").textContent,
       website: document.getElementById("website-link").href,
     };
@@ -113,6 +118,24 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .catch((error) => {
         console.error("Error saving data:", error);
+      });
+  }
+
+  function loadData() {
+    fetch("/load-data")
+      .then((response) => response.json())
+      .then((data) => {
+        // Update the card details with the loaded data
+        informationDiv.style.backgroundColor = data.backgroundColor;
+        informationDiv.style.fontFamily = data.fontFamily;
+        document.getElementById("name").textContent = data.name;
+        document.getElementById("position").textContent = data.position;
+        document.getElementById("number").textContent = data.phone;
+        document.getElementById("email").textContent = data.email;
+        document.getElementById("website-link").textContent = data.website;
+      })
+      .catch((error) => {
+        console.error("Error loading data:", error);
       });
   }
 });
