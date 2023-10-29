@@ -12,6 +12,12 @@ const app = express();
 
 app.use(favicon(path.join(__dirname,'views','favicon.ico')));
 
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+app.set('view engine', 'ejs');
+
 // Connect to MongoDB using Mongoose
 mongoose
   .connect("mongodb+srv://fearlocity:fear@card.fzquwhr.mongodb.net/card_info?retryWrites=true&w=majority", {
@@ -24,24 +30,6 @@ mongoose
   .catch((error) => {
     console.error("Error connecting to MongoDB:", error);
   });
-
-// Create a Mongoose model for your data
-const UserInfo = mongoose.model('UserInfo', {
-  backgroundColor: String,
-  fontFamily: String,
-  name: String,
-  position: String,
-  number: String,
-  email: String,
-  website: String,
-});
-
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-app.set('view engine', 'ejs');
-
 
 app.post("/register", async (req, res) => {
   const { username, password } = req.body;
