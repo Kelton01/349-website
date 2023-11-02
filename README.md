@@ -1,11 +1,6 @@
 # Group: Byte Me
 
-# Business Card Maker
-
-The Business Card Creator Website is a user-friendly online tool that empowers individuals and professionals to design and customize their own digital business cards.
-This intuitive platform allows users to create personalized business cards that include essential contact information such as name, position, phone number, and email address.
-
-## Contributors
+## Members
 
 - Marcilino Lamiy -- Maromicho12@csu.fullerton.edu
 - Bryan Lam -- bryanlam4011@gmail.com
